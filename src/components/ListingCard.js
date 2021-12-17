@@ -1,6 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
-function ListingCard({card}) {
+function ListingCard({card, onDeleteCards}) {
+  const[like,setLike]= useState(false)
+  const[star,setStar]= useState("☆")
+  function handleDeleteClick(){
+    fetch(`http://localhost:6001/listings/${card.id}`,{
+      method: "DELETE",
+    })
+      .then((r)=>r.json())
+      .then(()=> onDeleteCards(card));
+  }
+
+  function handleFavorite(){
+    if (like === true){
+      setLike(false)
+      setStar( "☆")
+    }
+    else{
+      setLike(true)
+      setStar( "★")
+    }
+  }
+  //☆  ★
   return (
     <li className="card">
       <div className="image">
@@ -8,14 +29,10 @@ function ListingCard({card}) {
         <img src={card.image} alt={card.description} />
       </div>
       <div className="details">
-        {true ? (
-          <button className="emoji-button favorite active">★</button>
-        ) : (
-          <button className="emoji-button favorite">☆</button>
-        )}
+        <button className="emoji-button.favorite" onClick={handleFavorite}>{star}</button>
         <strong>{card.description}</strong>
         <span> · {card.location}</span>
-        <button className="emoji-button delete">🗑</button>
+        <button className="emoji-button delete" onClick={handleDeleteClick}>🗑</button>
       </div>
     </li>
   );

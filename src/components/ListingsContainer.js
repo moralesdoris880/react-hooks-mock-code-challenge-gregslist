@@ -11,10 +11,15 @@ function ListingsContainer() {
     .then((cards)=> setCards(cards));
   },[]);
 
+  function handleDeleteCard(deletedCard){
+    const updatedCards = cards.filter((card)=> card.id !== deletedCard.id);
+    setCards(updatedCards);
+  }
+
   return (
     <main>
       <ul className="cards">
-      {cards.map((card)=>{return<ListingCard key={card.id} card={card} />})} 
+      {cards.map((card)=>{return<ListingCard key={card.id} card={card} onDeleteCards={handleDeleteCard}/>})} 
       </ul>
     </main>
   );
